@@ -25,7 +25,7 @@ import UpdateProfile from './components/updateProfile/UpdateProfile';
 import Offers from './pages/Offers';
 import Layout from './Layout';
 import ProtectedRoutes from './context/ProtectedRoutes';
-import { useUserFromLocalStorage } from '../../store/reducers/userSlice';
+import { useUserFromLocalStorage } from './store/reducers/userSlice';
 
 function App() {
 	let [isOpenRegister, setIsOpenRegister] = useState(false);
