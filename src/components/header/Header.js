@@ -8,7 +8,7 @@ function Header() {
 	const dispatch = useDispatch();
 	// useUserFromLocalStorage()
 	const { user } = useSelector((state) => state.user);
-	console.log(user);
+	// console.log(user);
 	return (
 		<div className=" hidden lg:block bg-gray-100">
 			<div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
