@@ -1,8 +1,7 @@
 {
   "name": "kacha-bazar",
   "version": "0.1.0",
-  "homepage": "https://intellidevelopers.github.io/TradeTrove-Ecommerce/",
-  "private": "true",
+  "private": true,
   "dependencies": {
     "@headlessui/react": "^1.6.0",
     "@heroicons/react": "^1.0.6",
@@ -27,8 +26,6 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "https://github.com/Intellidevelopers/TradeTrove-Ecommerce.git -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

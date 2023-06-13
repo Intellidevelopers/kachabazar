@@ -169,12 +169,14 @@ function Footer() {
 
                 <p className="leading-7 font-sans text-sm text-gray-600 mt-3">
                   <span>
-                    NO 2 Adegoke St, Ibadan Oyo, Nigeria
+                    NO 2 Adegoke Bus Stop Orita 
+                    Challenge, Ibadan Oyo,
+                     Nigeria
                   </span>
                   <br />
-                  <span>Tell: +234-808-888-6823</span>
+                  <span>Tell:+234-808-888-6823</span>
                   <br />
-                  <span>Email: support@tradetrove.com.ng</span>
+                  <span>Email: support@kachabazar.com.ng</span>
                 </p>
               </div>
             </div>
@@ -336,7 +338,7 @@ function Footer() {
           <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 flex justify-center py-4">
             <p className="text-sm text-gray-500 leading-6">
               Copyright 2022 @
-              <span className="text-emerald-500">TradeTrove</span>, All rights
+              <span className="text-emerald-500">KachaBazar</span>, All rights
               reserved.
             </p>
           </div>

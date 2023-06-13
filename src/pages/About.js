@@ -29,7 +29,7 @@ const About = () => {
           <div className="grid grid-flow-row lg:grid-cols-2 gap-4 lg:gap-16 ">
             <div>
               <h3 className="text-xl lg:text-3xl mb-2  font-semibold">
-                Welcome to our TradeTrove
+                Welcome to our KachaBazar
               </h3>
               <div className="mt-3 text-base opacity-90 leading-7">
                 <p className="mb-4">
@@ -250,7 +250,7 @@ const About = () => {
                 <div className="py-4">
                   <h5 className="text-lg font-semibold ">Adeagbo Josiah</h5>
                   <span className="opacity-75 text-sm">
-                    Co-founder &amp; Executive
+                    Founder &amp; Executive
                   </span>
                 </div>
               </div>
@@ -303,7 +303,7 @@ const About = () => {
                   </span>
                 </span>
                 <div className="py-4">
-                  <h5 className="text-lg font-semibold ">Orla Dwyer</h5>
+                  <h5 className="text-lg font-semibold ">Ayomikun Makinde</h5>
                   <span className="opacity-75 text-sm">Chief Executive</span>
                 </div>
               </div>
@@ -411,7 +411,7 @@ const About = () => {
                   </span>
                 </span>
                 <div className="py-4">
-                  <h5 className="text-lg font-semibold ">Dara Frazier</h5>
+                  <h5 className="text-lg font-semibold ">Adeagbo Mary</h5>
                   <span className="opacity-75 text-sm">
                     Chief Strategy Officer
                   </span>

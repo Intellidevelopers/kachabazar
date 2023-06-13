@@ -41,7 +41,7 @@ function Contact() {
               <h5 class="text-xl mb-2 font-bold">Email Us</h5>
               <p className="mb-0 text-base opacity-90 leading-7">
                 <a href="mailto:kachabazar@gmail.com" class="text-emerald-500">
-                  tradetrove@gmail.com{" "}
+                 speedafhost@gmail.com{" "}
                 </a>
                 Interactively grow empowered for process-centric total linkage.
               </p>
@@ -66,8 +66,8 @@ function Contact() {
               </span>
               <h5 class="text-xl mb-2 font-bold">Call Us</h5>
               <p class="mb-0 text-base opacity-90 leading-7">
-                <a href="mailto:+2348088886823" class="text-emerald-500">
-                +2348088886823{" "}
+                <a href="mailto:029-00124667" class="text-emerald-500">
+                  08088886823{" "}
                 </a>
                 Distinctively disseminate focused solutions clicks-and-mortar
                 ministate.
@@ -98,7 +98,8 @@ function Contact() {
               </span>
               <h5 class="text-xl mb-2 font-bold">Location</h5>
               <p class="mb-0 text-base opacity-90 leading-7">
-                <a href="mailto:" class="text-emerald-500"></a> Orita Challenge Ibadan Oyo Nigeria
+                <a href="mailto:" class="text-emerald-500"></a> NO 2 Adegoke Terminal, 
+                Ibadan Oyo Nigeria
               </p>
             </div>
           </div>
@@ -156,7 +157,7 @@ function Contact() {
               <form className="w-full mx-auto flex flex-col justify-center">
                 <div className="mb-12">
                   <h3 className="text-xl md:text-2xl lg:text-3xl font-semibold mb-3">
-                    For any suppoort just send your query
+                    For any support just send your query
                   </h3>
                   <p className="text-base opacity-90 leading-7">
                     Collaboratively promote client-focused convergence vis-a-vis
@@ -174,7 +175,7 @@ function Contact() {
                         <input
                           name="name"
                           type="text"
-                          placeholder="Inter Your Name"
+                          placeholder="Enter Your Name"
                           class="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                         ></input>
                       </div>
@@ -187,7 +188,7 @@ function Contact() {
                         <input
                           name="email"
                           type="email"
-                          placeholder="Inter Your Email"
+                          placeholder="Enter Your Email"
                           class="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                         ></input>
                       </div>
@@ -201,7 +202,7 @@ function Contact() {
                       <input
                         name="subject"
                         type="text"
-                        placeholder="Inter Your Subject"
+                        placeholder="Enter Your Subject"
                         class="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                         
                       ></input>

@@ -164,7 +164,7 @@ function Informations() {
               </svg>
             </span>
             <p className="font-sans leading-5 text-sm text-gray-500">
-              Delivery from our pick point Ibadan Oyo Nigeria
+              Delivery from our pick point Challenge Bus Terminal Ibadan Oyo Nigeria
             </p>
           </li>
         </ul>

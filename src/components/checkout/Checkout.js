@@ -56,14 +56,14 @@ function Checkout() {
               
               <Formik
                 initialValues={{
-                  firstName: "Adeagbo",
-                  lastName: "Josiah",
-                  email: "example@gmail.com",
-                  phoneNumber: "1234567890",
+                  firstName: "samet",
+                  lastName: "kaya",
+                  email: "kaya67380@gmail.com",
+                  phoneNumber: "1235",
                   streetAddress: "kadıköy",
-                  city: "Ibadan",
-                  country: "Nigeria",
-                  zipPostal: "340001",
+                  city: "istanbul",
+                  country: "kadıköy",
+                  zipPostal: "3400",
                   shippingOption: "FedEx",
                   paymentMethod: "COD",
                 }}
@@ -74,7 +74,7 @@ function Checkout() {
               >
                 {({ errors, touched }) => {
                   return (
-                    <Formik>
+                    <Form>
                       <div>
                         <h2 className="font-semibold  text-base text-gray-700 pb-3">
                           01. Personal Details
@@ -92,7 +92,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="firstName"
                                 name="firstName"
-                                placeholder="Adeagbo"
+                                placeholder="Samet"
                               />
                             </div>
                             {errors.firstName && touched.firstName && (
@@ -113,7 +113,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="lastName"
                                 name="lastName"
-                                placeholder="Josiah"
+                                placeholder="Kaya"
                               />
                             </div>
                             {errors.lastName && touched.lastName && (
@@ -134,7 +134,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="email"
                                 name="email"
-                                placeholder="example@gmail.com"
+                                placeholder="info@gmail.com"
                               />
                             </div>
                             {errors.email && touched.email && (
@@ -156,7 +156,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="phoneNumber"
                                 name="phoneNumber"
-                                placeholder="+234-123-456-7890"
+                                placeholder="+90-1234567891"
                               />
                             </div>
                             {errors.phoneNumber && touched.phoneNumber && (
@@ -184,7 +184,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="streetAddress"
                                 name="streetAddress"
-                                placeholder="N0 2 Adegoke St, Ibadan Oyo, Nigeria"
+                                placeholder="ümraniye sondurak No:3 Daire:70 Ümraniye/İstanbul"
                               />
                             </div>
                             {errors.streetAddress && touched.streetAddress && (
@@ -205,7 +205,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="city"
                                 name="city"
-                                placeholder="Ibadan"
+                                placeholder="İstanbul"
                               />
                             </div>
                             {errors.city && touched.city && (
@@ -226,7 +226,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="country"
                                 name="country"
-                                placeholder="Nigeria"
+                                placeholder="Ümraniye"
                               />
                             </div>
                             {errors.country && touched.country && (
@@ -247,7 +247,7 @@ function Checkout() {
                                 className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg:white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
                                 id="zipPostal"
                                 name="zipPostal"
-                                placeholder="340001"
+                                placeholder="34000"
                               />
                             </div>
                             {errors.zipPostal && touched.zipPostal && (
@@ -327,8 +327,6 @@ function Checkout() {
                                 </span>
                               )}
                           </div>
-                        <div>
-                      </div>
                           <div className="col-span-6 sm:col-span-3">
                             <div>
                               <div className="p-3 border border-gray-200 bg-white rounded-md ">
@@ -548,7 +546,7 @@ function Checkout() {
                           </button>
                         </div>
                       </div>
-                    </Formik>
+                    </Form>
                   );
                 }}
               </Formik>

@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../../assets/icon/logo.png";
+import logo from "../../assets/icon/logo-light.svg";
 import Basket from "../basket/Basket";
 import SearchBar from "../searchBar/SearchBar";
 import { Fragment } from "react";

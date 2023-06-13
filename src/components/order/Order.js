@@ -109,7 +109,8 @@ function Order({}) {
                     </Link>
                   </h2>
                   <p className="text-sm text-gray-500">
-                    Adegoke Bus Stop, No:5  Ibadan, Nigeria<br /> {" "}
+                    Kazım Karabekir, No:5  Ümraniye, <br /> İstanbul
+                    34000{" "}
                   </p>
                 </div>
               </div>

@@ -30,11 +30,11 @@ function MobileApp() {
           </div>
           <div className="text-center">
             <h3 className="text-xl md:text-2xl lg:text-3xl font-bold  mb-3">
-              Get Your Daily Needs From Our TradeTrove Store
+              Get Your Daily Needs From Our KachaBazar Store
             </h3>
             <p className="text-base opacity-90 leading-7">
               There are many products you will find our shop, Choose your daily
-              necessary product from our TradeTrove shop and get some special
+              necessary product from our KachaBazar shop and get some special
               offer.
             </p>
             <div className="mt-8 block lg:flex">

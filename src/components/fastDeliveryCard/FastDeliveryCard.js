@@ -17,8 +17,8 @@ function FastDeliveryCard() {
                   <span className="text-emerald-500">Your Home</span>
                 </h2>
                 <p className="text-sm leading-6">
-                  There are many products you will find in our shop, Choose your
-                  daily necessary product from our TradeTrove shop and get some
+                  There are many products you will find our shop, Choose your
+                  daily necessary product from our KachaBazar shop and get some
                   special offer. See Our latest discounted products from here
                   and get a special discount.
                 </p>
