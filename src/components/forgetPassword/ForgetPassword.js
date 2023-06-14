@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 // import { Dialog, Transition } from '@headlessui/react';
 import { Formik, Field, Form } from 'formik';
 import { useDispatch } from 'react-redux';
-// import axios from 'axios';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import * as Yup from 'yup';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
 // import { Link } from 'react-router-dom';
@@ -13,32 +14,39 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 	// const { isOpen } = useSelector((state) => state.isOpen);
 	// const { user } = useSelector((state) => state.user);
 	const LoginSchema = Yup.object().shape({
-		password: Yup.string().required('Password is required!'),
 		email: Yup.string().email('Invalid email').required('Email is required!'),
 	});
-	// const { login } = UserAuth();
-
 	const handleSubmit = async (values) => {
 		// console.log(isValidating);
 		setIsLoading(true);
-		fetch(`${process.env.REACT_APP_BASE_API_URL}/user/forget-password`, {
-			method: 'POST',
-			body: JSON.stringify(values),
-			headers: { 'Content-Type': 'application/json' },
-		})
-			.then((response) => response.json())
+		axios
+			.post(
+				`${process.env.REACT_APP_BASE_API_URL}/user/forget-password`,
+				values
+			)
+			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-                console.log('link sent', data)
+				toast.success(data.message);
+				toast.success('Password reset link sent successfully');
+				setTimeout(() => {
+					dispatch(isLoginAction(false));
+				}, 2000);
 			})
 			.catch((error) => {
+				toast.error(
+					error
+						? error?.response?.data?.message ||
+								error?.response?.data?.error.message
+						: error?.message
+				);
 				setIsLoading(false);
 				console.log(error);
 			});
 	};
 
 	return (
-		<div className="overflow-hidden bg-white mx-auto mx-auto p-4 md:p-2 w-full md:min-w-[700px] md:max-w-[800px] mt-10 md:mt-20 shadow-xl">
+		<div className="overflow-hidden bg-white mx-auto mx-auto mt-10 md:mt-20 mb-5 md:mb-10 p-4 md:p-6 w-full md:max-w-[600px] shadow-xl rounded-lg">
 			<div className="text-center mb-6">
 				<h2 className="text-3xl font-bold text-black">Forget password</h2>
 				<p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
@@ -111,7 +119,7 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 								disabled={isLoading}
 								className="w-full text-center py-3 rounded bg-emerald-500 text-white hover:bg-emerald-600 transition-all focus:outline-none my-1"
 							>
-								{!isLoading ? 'Login' : 'Logining you in'}
+								{!isLoading ? 'Request reset link' : 'Processing'}
 							</button>
 						</div>
 					</Form>

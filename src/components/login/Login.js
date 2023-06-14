@@ -1,9 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Formik, Field, Form } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-// import axios from 'axios';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
 import { login } from '../../store/reducers/userSlice';
 // import { Link } from 'react-router-dom';
@@ -22,20 +23,25 @@ const Login = ({ setIsOpenRegister }) => {
 	const handleSubmit = async (values) => {
 		// console.log(isValidating);
 		setIsLoading(true);
-		fetch(`${process.env.REACT_APP_BASE_API_URL}/user/login`, {
-			// method: 'GET',
-			method: 'POST',
-			body: JSON.stringify(values),
-			headers: { 'Content-Type': 'application/json' },
-		})
-			.then((response) => response.json())
+		axios
+			.post(`${process.env.REACT_APP_BASE_API_URL}/user/login`, values)
+			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
+				toast.success(data.message);
+				toast.success('Password updated successfully');
 				localStorage.setItem('user', JSON.stringify(data));
 				dispatch(login(data));
 				dispatch(isLoginAction(false));
 			})
 			.catch((error) => {
+				toast.error(
+					error
+						? error?.response?.data?.message ||
+								error?.response?.data?.error.message ||
+								error?.message
+						: error?.message
+				);
 				setIsLoading(false);
 				console.log(error);
 			});
@@ -189,12 +195,13 @@ const Login = ({ setIsOpenRegister }) => {
 												</div>
 												<div className="flex items-center text-black justify-between">
 													<div className="flex ms-auto">
-														<button
+														<a
+															href="/forget-password"
 															type="button"
 															className="text-end text-sm text-heading ps-3 underline hover:no-underline focus:outline-none"
 														>
 															Forgot Password?
-														</button>
+														</a>
 													</div>
 												</div>
 												<button

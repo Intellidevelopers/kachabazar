@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
 
@@ -12,23 +14,30 @@ const SignupSchema = Yup.object().shape({
 	newPassword: Yup.string().required('New Password is required!'),
 });
 
-const ChangePassword = () => {
+const UpdatePassword = () => {
 	const handleSubmit = async (values) => {
-		// console.log(isValidating);
 		setIsLoading(true);
-		fetch(`${process.env.REACT_APP_BASE_API_URL}/user/change-password`, {
-			// method: 'GET',
-			method: 'POST',
-			body: JSON.stringify(values),
-			headers: { 'Content-Type': 'application/json' },
-		})
-			.then((response) => response.json())
+		axios
+			.post(
+				`${process.env.REACT_APP_BASE_API_URL}/user/update-password`,
+				values
+			)
+			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				console.log(data);
-				dispatch(isLoginAction(true));
+				toast.success(data.message);
+				toast.success('Password updated successfully');
+				setTimeout(() => {
+					dispatch(isLoginAction(false));
+				}, 2000);
 			})
 			.catch((error) => {
+				toast.error(
+					error
+						? error?.response?.data?.message ||
+								error?.response?.data?.error.message
+						: error?.message
+				);
 				setIsLoading(false);
 				console.log(error);
 			});
@@ -152,4 +161,4 @@ const ChangePassword = () => {
 	);
 };
 
-export default ChangePassword;
+export default UpdatePassword;

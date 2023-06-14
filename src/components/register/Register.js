@@ -1,39 +1,53 @@
-import React, { Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { Formik, Field, Form } from "formik";
-import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { isLoginAction } from "../../store/reducers/isOpenSlice";
+import React, { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { Formik, Field, Form } from 'formik';
+import * as Yup from 'yup';
+import validator from 'validator';
+import { useDispatch } from 'react-redux';
+import { isLoginAction } from '../../store/reducers/isOpenSlice';
 import { login } from '../../store/reducers/userSlice';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+
 const Register = ({ isOpen, setIsOpenRegister }) => {
+	const [isLoading, setIsLoading] = useState(false);
+	const dispatch = useDispatch();
+	const SignupSchema = Yup.object().shape({
+		name: Yup.string().required('Name is required!'),
+		password: Yup.string()
+			.required('Password is required!')
+			.test('strong-password', 'Password must be strong', (value) => {
+				return validator.isStrongPassword(value, {
+					minLength: 8,
+					minLowercase: 1,
+					minUppercase: 1,
+					minNumbers: 1,
+					minSymbols: 1,
+				});
+			}),
+		email: Yup.string().email('Invalid email').required('Email is required!'),
+	});
 
-  const dispatch = useDispatch();
-  const SignupSchema = Yup.object().shape({
-    fullName: Yup.string().required("Name is required!"),
-    password: Yup.string().required("Password is required!"),
-    email: Yup.string().email("Invalid email").required("Email is required!"),
-  });
-
-  const handleSubmit = async (values) => {
+	const handleSubmit = async (values) => {
 		try {
 			// console.log(isValidating);
-			fetch(`${process.env.REACT_APP_BASE_API_URL}/user/signup`, {
-				// method: 'GET',
-				method: 'POST',
-				body: JSON.stringify(values),
-				headers: { 'Content-Type': 'application/json' },
-			})
-				.then((response) => response.json())
+			setIsLoading(true);
+			axios
+				.post(`${process.env.REACT_APP_BASE_API_URL}/user/signup`, values)
 				.then((data) => {
 					localStorage.setItem('user', JSON.stringify(data));
 					dispatch(login(data));
+					toast.success('signup successfull');
 					dispatch(isLoginAction(false));
+					setIsLoading(false);
 				});
 		} catch (error) {
 			console.log(error);
+			toast.error('signup not successfull');
+			setIsLoading(false);
 		}
 	};
-  return (
+	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
 				as="div"
@@ -96,7 +110,7 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 											<div className="grid grid-cols-1 gap-5">
 												<div className="grid">
 													<label
-														htmlFor="email"
+														htmlFor="fullName"
 														className="block text-gray-500 font-medium text-sm leading-none mb-2 "
 													>
 														Name
@@ -124,7 +138,7 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 														<Field
 															className="py-2 pl-10 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
 															id="fullName"
-															name="fullName"
+															name="name"
 															placeholder="Full Name"
 															type="text"
 														/>
@@ -236,7 +250,7 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 													type="submit"
 													className="w-full text-center py-3 rounded bg-emerald-500 text-white hover:bg-emerald-600 transition-all focus:outline-none my-1"
 												>
-													Register
+													{!isLoading ? 'Register' : 'Loading'}
 												</button>
 											</div>
 										</Form>

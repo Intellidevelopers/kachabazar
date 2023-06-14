@@ -5,7 +5,7 @@ import { isLoginAction } from '../../store/reducers/isOpenSlice';
 import { useNavigate } from 'react-router-dom';
 const UserProfile = () => {
 	const dispatch = useDispatch();
-	const navigate = useNavigate;
+	const navigate = useNavigate();
 	const { user } = useSelector((state) => state.user);
 
 	return (
@@ -13,7 +13,7 @@ const UserProfile = () => {
 			{!user ? (
 				<button
 					onClick={() => dispatch(isLoginAction(true))}
-					className="!text-white hover:!text-white text-2xl font-bold debug"
+					className="!text-white hover:!text-white text-2xl font-bold"
 				>
 					<span>
 						<svg
@@ -35,8 +35,8 @@ const UserProfile = () => {
 				</button>
 			) : (
 				<button
-					onClick={() => navigate('/dashboard')}
-					className="!text-white hover:!text-white text-2xl font-bold debug"
+					onClick={() => navigate('/user/dashboard')}
+					className="!text-white hover:!text-white text-2xl font-bold"
 				>
 					<span>
 						<svg
