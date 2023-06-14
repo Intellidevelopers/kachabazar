@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 
 const initialState = {
 	user: localStorage.getItem('user')
-		? JSON.parse(localStorage.getItem('cartItems'))
+		? JSON.parse(localStorage.getItem('user'))
 		: '',
 };
 export const UserSlice = createSlice({
@@ -13,10 +13,11 @@ export const UserSlice = createSlice({
 	reducers: {
 		login(state, action) {
 			state.user = action.payload;
+			// Add user data to local storage
 			localStorage.setItem('user', JSON.stringify(state.user));
 		},
 		logout(state, action) {
-			state.user = null;
+			state.user = action.payload;
 			// Remove user data from local storage
 			localStorage.removeItem('user');
 		},

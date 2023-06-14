@@ -2,13 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
-// import { useUserFromLocalStorage } from '../../store/reducers/userSlice';
 // import { UserAuth } from '../../store/reducers/UserAuth';
 function Header() {
 	const dispatch = useDispatch();
-	// useUserFromLocalStorage()
 	const { user } = useSelector((state) => state.user);
-	// console.log(user);
 	return (
 		<div className=" hidden lg:block bg-gray-100">
 			<div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
@@ -60,7 +57,7 @@ function Header() {
 						<span className="mx-2">|</span>
 						{!user ? (
 							<button
-								onClick={() => dispatch(isLoginAction(false))}
+								onClick={() => dispatch(isLoginAction(true))}
 								className="!no-underline !text-black flex items-center font-medium cursor-pointer hover:!text-emerald-600 "
 							>
 								<span className="mr-1">
@@ -82,7 +79,7 @@ function Header() {
 								Login
 							</button>
 						) : (
-							<p>user</p>
+							<p>{user?.user?.name}</p>
 						)}
 					</div>
 				</div>

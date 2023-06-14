@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Formik, Field, Form } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { login } from '../../store/reducers/userSlice';
 
 const Login = ({ setIsOpenRegister }) => {
 	const dispatch = useDispatch();
+	const [isLoading, setIsLoading] = useState(false);
 	const { isOpen } = useSelector((state) => state.isOpen);
 	// const { user } = useSelector((state) => state.user);
 	const LoginSchema = Yup.object().shape({
@@ -19,23 +20,25 @@ const Login = ({ setIsOpenRegister }) => {
 	// const { login } = UserAuth();
 
 	const handleSubmit = async (values) => {
-		try {
-			// console.log(isValidating);
-			fetch(`${process.env.REACT_APP_BASE_API_URL}/user/login`, {
-				// method: 'GET',
-				method: 'POST',
-				body: JSON.stringify(values),
-				headers: { 'Content-Type': 'application/json' },
+		// console.log(isValidating);
+		setIsLoading(true);
+		fetch(`${process.env.REACT_APP_BASE_API_URL}/user/login`, {
+			// method: 'GET',
+			method: 'POST',
+			body: JSON.stringify(values),
+			headers: { 'Content-Type': 'application/json' },
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				setIsLoading(false);
+				localStorage.setItem('user', JSON.stringify(data));
+				dispatch(login(data));
+				dispatch(isLoginAction(false));
 			})
-				.then((response) => response.json())
-				.then((data) => {
-					localStorage.setItem('user', JSON.stringify(data));
-					dispatch(login(data));
-					dispatch(isLoginAction(false));
-				});
-		} catch (error) {
-			console.log(error);
-		}
+			.catch((error) => {
+				setIsLoading(false);
+				console.log(error);
+			});
 	};
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -196,10 +199,10 @@ const Login = ({ setIsOpenRegister }) => {
 												</div>
 												<button
 													type="submit"
-													disabled={isValidating}
+													disabled={isLoading}
 													className="w-full text-center py-3 rounded bg-emerald-500 text-white hover:bg-emerald-600 transition-all focus:outline-none my-1"
 												>
-													{!isValidating ? 'Login' : 'Logining you in'}
+													{!isLoading ? 'Login' : 'Logining you in'}
 												</button>
 											</div>
 										</Form>

@@ -16,6 +16,7 @@ import DrawerCart from './components/drawer/Drawer';
 import Search from './components/search/Search';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
+import ForgetPassword from './components/forgetPassword/ForgetPassword';
 import { Fragment, useState } from 'react';
 import User from './components/user/User';
 import Dashboard from './components/dashboard/Dashboard';
@@ -42,6 +43,10 @@ function App() {
 					<Route path={'product/:productTitle'} element={<Product />} />
 					<Route path="search" element={<Search />} />
 					<Route path={'order/:id'} element={<Order />} />
+					<Route
+						path={'forget-password'}
+						element={<ForgetPassword setIsOpenRegister={setIsOpenRegister} />}
+					/>
 					<Route element={<ProtectedRoutes />}>
 						<Route path="checkout" element={<Checkout />} />
 						<Route path="offer" element={<Offers />} />
