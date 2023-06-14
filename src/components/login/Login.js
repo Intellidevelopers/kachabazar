@@ -29,7 +29,6 @@ const Login = ({ setIsOpenRegister }) => {
 			.then((data) => {
 				setIsLoading(false);
 				toast.success(data.message);
-				toast.success('Password updated successfully');
 				localStorage.setItem('user', JSON.stringify(data));
 				dispatch(login(data));
 				dispatch(isLoginAction(false));

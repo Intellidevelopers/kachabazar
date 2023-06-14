@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import validator from 'validator';
+// import validator from 'validator';
 import { useDispatch } from 'react-redux';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
 import { login } from '../../store/reducers/userSlice';
@@ -14,38 +14,43 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 	const dispatch = useDispatch();
 	const SignupSchema = Yup.object().shape({
 		name: Yup.string().required('Name is required!'),
-		password: Yup.string()
-			.required('Password is required!')
-			.test('strong-password', 'Password must be strong', (value) => {
-				return validator.isStrongPassword(value, {
-					minLength: 8,
-					minLowercase: 1,
-					minUppercase: 1,
-					minNumbers: 1,
-					minSymbols: 1,
-				});
-			}),
+		password: Yup.string().required('Password is required!'),
+		// .test('strong-password', 'Password must be strong', (value) => {
+		// 	return validator.isStrongPassword(value, {
+		// minLength: 6,
+		// minLowercase: 1,
+		// minUppercase: 1,
+		// minNumbers: 1,
+		// minSymbols: 1,
+		// });
+		// }),
 		email: Yup.string().email('Invalid email').required('Email is required!'),
 	});
 
 	const handleSubmit = async (values) => {
-		try {
-			// console.log(isValidating);
-			setIsLoading(true);
-			axios
-				.post(`${process.env.REACT_APP_BASE_API_URL}/user/signup`, values)
-				.then((data) => {
-					localStorage.setItem('user', JSON.stringify(data));
-					dispatch(login(data));
-					toast.success('signup successfull');
-					dispatch(isLoginAction(false));
-					setIsLoading(false);
-				});
-		} catch (error) {
-			console.log(error);
-			toast.error('signup not successfull');
-			setIsLoading(false);
-		}
+		setIsLoading(true);
+		axios
+			.post(`${process.env.REACT_APP_BASE_API_URL}/user/signup`, values)
+			.then((res) => res.data)
+			.then((data) => {
+				localStorage.setItem('user', JSON.stringify(data));
+				dispatch(login(data));
+				console.log(data);
+				toast.success('signup successfull');
+				dispatch(isLoginAction(false));
+				setIsOpenRegister(false);
+				setIsLoading(false);
+			})
+			.catch((error) => {
+				toast.error(
+					error
+						? error?.response?.data?.message ||
+								error?.response?.data?.error.message
+						: error?.message
+				);
+				setIsLoading(false);
+				console.log(error);
+			});
 	};
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
@@ -99,7 +104,7 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 								<Formik
 									validationSchema={SignupSchema}
 									initialValues={{
-										fullName: '',
+										name: '',
 										password: '',
 										email: '',
 									}}
@@ -110,7 +115,7 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 											<div className="grid grid-cols-1 gap-5">
 												<div className="grid">
 													<label
-														htmlFor="fullName"
+														htmlFor="name"
 														className="block text-gray-500 font-medium text-sm leading-none mb-2 "
 													>
 														Name
@@ -137,15 +142,15 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 
 														<Field
 															className="py-2 pl-10 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
-															id="fullName"
+															id="name"
 															name="name"
 															placeholder="Full Name"
 															type="text"
 														/>
 													</div>
-													{errors.fullName && errors.fullName && (
+													{errors.name && errors.name && (
 														<span className="text-red-400 text-sm mt-2">
-															{errors.fullName}
+															{errors.name}
 														</span>
 													)}
 												</div>

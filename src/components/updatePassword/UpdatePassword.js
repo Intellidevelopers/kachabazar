@@ -3,33 +3,37 @@ import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
-import { isLoginAction } from '../../store/reducers/isOpenSlice';
+import { useSelector } from 'react-redux';
 
 const SignupSchema = Yup.object().shape({
-	email: Yup.string()
-		.email('Invalid email')
-		.required('Email address is required!'),
-	currentPassword: Yup.string().required('Current Password is required!'),
-	newPassword: Yup.string().required('New Password is required!'),
+	email: Yup.string().email('Invalid email'),
+	password: Yup.string().required('Current Password is required!'),
+	confirmPassword: Yup.string()
+		.required('New Password is required!')
+		.oneOf(
+			[Yup.ref('password'), null],
+			'Password and confirm password must match'
+		),
 });
 
 const UpdatePassword = () => {
+	const { user } = useSelector((state) => state.user);
+	const [isLoading, setIsLoading] = useState(false);
 	const handleSubmit = async (values) => {
+		const data = {
+			password: values.password,
+			confirmPassword: values.confirmPassword,
+			token: user?.token,
+			id: user?.user?._id,
+		};
+		console.log(data);
 		setIsLoading(true);
 		axios
-			.post(
-				`${process.env.REACT_APP_BASE_API_URL}/user/update-password`,
-				values
-			)
+			.post(`${process.env.REACT_APP_BASE_API_URL}/user/update-password`, data)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				toast.success(data.message);
-				toast.success('Password updated successfully');
-				setTimeout(() => {
-					dispatch(isLoginAction(false));
-				}, 2000);
+				toast.success(data.message || 'Password update Successfully');
 			})
 			.catch((error) => {
 				toast.error(
@@ -43,8 +47,6 @@ const UpdatePassword = () => {
 			});
 	};
 
-	const dispatch = useDispatch();
-	const [isLoading, setIsLoading] = useState(false);
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
@@ -62,8 +64,8 @@ const UpdatePassword = () => {
 
 			<Formik
 				initialValues={{
-					currentPassword: '',
-					newPassword: '',
+					password: '',
+					confirmPassword: '',
 					email: '',
 				}}
 				validationSchema={SignupSchema}
@@ -99,45 +101,45 @@ const UpdatePassword = () => {
 											</div>
 											<div className="col-span-6 sm:col-span-6">
 												<label
-													htmlFor="currentPassword"
+													htmlFor="password"
 													className="block text-gray-500 font-medium text-sm leading-none mb-2"
 												>
 													Current Password
 												</label>
 												<div className="relative">
 													<Field
-														id="currentPassword"
-														name="currentPassword"
+														id="password"
+														name="password"
 														placeholder="Your Current Password"
 														className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
 													/>
 												</div>
 												<span className="text-red-400 text-sm mt-2">
-													{errors.currentPassword &&
-														touched.currentPassword && (
-															<div>{errors.currentPassword}</div>
-														)}
+													{errors.password && touched.password && (
+														<div>{errors.password}</div>
+													)}
 												</span>
 											</div>
 											<div className="col-span-6 sm:col-span-6">
 												<label
-													htmlFor="newPassword"
+													htmlFor="confirmPassword"
 													className="block text-gray-500 font-medium text-sm leading-none mb-2"
 												>
-													New Password
+													Confirm Password
 												</label>
 												<div className="relative">
 													<Field
-														id="newPassword"
-														name="newPassword"
-														placeholder="Your New Password"
+														id="confirmPassword"
+														name="confirmPassword"
+														placeholder="Confirm your Password"
 														className="py-2 px-4 md:px-5 w-full appearance-none border text-sm opacity-75 text-input rounded-md placeholder-body min-h-12 transition duration-200 focus:ring-0 ease-in-out bg-white border-gray-200 focus:outline-none focus:border-emerald-500 h-11 md:h-12"
 													/>
 												</div>
 												<span className="text-red-400 text-sm mt-2">
-													{errors.newPassword && touched.newPassword && (
-														<div>{errors.newPassword}</div>
-													)}
+													{errors.confirmPassword &&
+														touched.confirmPassword && (
+															<div>{errors.confirmPassword}</div>
+														)}
 												</span>
 											</div>
 										</div>

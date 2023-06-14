@@ -24,32 +24,31 @@ const ChangePassword = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	dispatch(isLoginAction(false));
 	const handleSubmit = async (values) => {
-		// console.log(isValidating);
-		const data = { ...values, token };
-		console.log(...values);
+		const data = {
+			password: values.password,
+			confirmPassword: values.confirmPassword,
+			token,
+		};
 		console.log(data);
 		setIsLoading(true);
 		axios
-			.post(
-				`${process.env.REACT_APP_BASE_API_URL}/user/change-password/${token}`,
-				values
-			)
+			.post(`${process.env.REACT_APP_BASE_API_URL}/user/change-password`, data)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				toast.success(data.message);
-				toast.success('Password changed Successfully');
-				setTimeout(() => {
-					navigate(`/`);
-					dispatch(isLoginAction(false));
-				}, 2000);
+				toast.success(data.message || 'Password changed Successfully');
+				dispatch(isLoginAction(true));
+				navigate(`/`);
 			})
-			.catch((error) => {
+			.catch((error) => {				
 				toast.error(
-					error ? error?.response?.data?.error || error?.message : error
+					error
+						? error?.response?.data?.message ||
+								error?.response?.data?.error.message
+						: error?.message
 				);
-				console.log(error);
 				setIsLoading(false);
+				console.log(error);
 			});
 	};
 
@@ -70,7 +69,7 @@ const ChangePassword = () => {
 
 			<Formik
 				initialValues={{
-					newPassword: '',
+					password: '',
 					confirmPassword: '',
 				}}
 				validationSchema={SignupSchema}
