@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 // import axios from 'axios';
 import * as Yup from 'yup';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
-import { login } from '../../store/reducers/userSlice';
 // import { Link } from 'react-router-dom';
 
 const ForgetPassword = ({ setIsOpenRegister }) => {
@@ -23,7 +22,6 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 		// console.log(isValidating);
 		setIsLoading(true);
 		fetch(`${process.env.REACT_APP_BASE_API_URL}/user/forget-password`, {
-			// method: 'GET',
 			method: 'POST',
 			body: JSON.stringify(values),
 			headers: { 'Content-Type': 'application/json' },
@@ -31,9 +29,7 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				setIsLoading(false);
-				localStorage.setItem('user', JSON.stringify(data));
-				dispatch(login(data));
-				dispatch(isLoginAction(false));
+                console.log('link sent', data)
 			})
 			.catch((error) => {
 				setIsLoading(false);
