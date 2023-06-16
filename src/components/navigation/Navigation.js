@@ -55,7 +55,7 @@ function Navigation() {
                   alignItems: "center",
                 }}
               >
-                <img className="flex items-center w-[110px] h-10 " src={logo} />
+                <img className="flex items-center w-[110px] h-10 " src={logo} alt="comapylogo"/>
               </span>
             </span>
           </Link>

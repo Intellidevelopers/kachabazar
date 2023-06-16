@@ -54,7 +54,7 @@ function App() {
 						path={'reset-password/:token'}
 						element={<ResetPassword setIsOpenRegister={setIsOpenRegister} />}
 					/>
-					<Route path={'verify-otp/:token'} element={<VerifyOtp />} />
+					<Route path={'verify-otp/:token/:email'} element={<VerifyOtp />} />
 					<Route path="change-password/:token" element={<ChangePassword />} />
 					<Route element={<ProtectedRoutes />}>
 						<Route path="checkout" element={<Checkout />} />

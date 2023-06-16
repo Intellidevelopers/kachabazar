@@ -27,9 +27,8 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 				setIsLoading(false);
 				toast.success(data.message || `otp sent successfully`);
 				dispatch(isLoginAction(false));
-				console.log(data?.token);
 				setTimeout(() => {
-					navigate(`/verify-otp/${data?.token}`);
+					navigate(`/verify-otp/${data?.token}/${data?.email}`);
 				}, 2000);
 			})
 			.catch((error) => {

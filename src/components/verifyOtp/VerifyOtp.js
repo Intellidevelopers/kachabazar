@@ -6,8 +6,7 @@ import validator from 'validator';
 
 const VerifyOtp = () => {
 	const navigate = useNavigate();
-
-	const { token } = useParams();
+	const { token, email } = useParams();
 	const [isLoading, setIsLoading] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [isError, setIsError] = useState(false);
@@ -76,7 +75,6 @@ const VerifyOtp = () => {
 			}
 		}
 	};
-
 	useEffect(() => {
 		setOtp(inputValues.join(''));
 		if (otp.length === 6) {
@@ -96,14 +94,13 @@ const VerifyOtp = () => {
 			return toast.error('OTP must be 6-digit number');
 		}
 		setIsLoading(true);
-		const data = { otp, token };
+		const data = { otp, token, email };
 		axios
 			.post(`${process.env.REACT_APP_BASE_API_URL}/user/verify-otp`, data)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				// toast.success(data.message);
-				console.log(data);
+				toast.success(data.message);
 				setIsSuccess('OTP verified Successfully');
 				setTimeout(() => {
 					navigate(`/change-password/${data?.token}`);
@@ -132,7 +129,10 @@ const VerifyOtp = () => {
 			<div className="text-center mb-6">
 				<h2 className="text-3xl font-bold text-black">Verify OTP</h2>
 				<p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
-					Enter the otp set to your email
+					Enter the otp set to your <br />
+					<span className="font-semibold">
+						{email.slice(0, 4)}*****{email.slice(9, 14)}
+					</span>
 				</p>
 			</div>
 			<div className="max-w-sm mx-auto md:max-w-lg my-5">
