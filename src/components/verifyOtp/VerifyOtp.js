@@ -131,7 +131,7 @@ const VerifyOtp = () => {
 				<p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
 					Enter the otp set to your <br />
 					<span className="font-semibold">
-						{email.slice(0, 4)}*****{email.slice(9, 14)}
+						{email.slice(0, 4)}*****{email.slice(9)}
 					</span>
 				</p>
 			</div>

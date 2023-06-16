@@ -239,16 +239,6 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 														</span>
 													)}
 												</div>
-												<div className="flex items-center text-black justify-between">
-													<div className="flex ms-auto">
-														<button
-															type="button"
-															className="text-end text-sm text-heading ps-3 underline hover:no-underline focus:outline-none"
-														>
-															Forgot password?
-														</button>
-													</div>
-												</div>
 												<button
 													type="submit"
 													className="w-full text-center py-3 rounded bg-emerald-500 text-white hover:bg-emerald-600 transition-all focus:outline-none my-1"

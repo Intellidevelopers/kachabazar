@@ -155,7 +155,7 @@ const UpdatePassword = () => {
 									className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-emerald-600 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
 									disabled={isLoading}
 								>
-									Change Password
+									{!isLoading ? 'Change Password' : 'Updating'}
 								</button>
 							</div>
 						</Form>

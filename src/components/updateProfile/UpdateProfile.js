@@ -18,13 +18,14 @@ const UpdateProfile = () => {
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.user);
 	const [selectedImage, setSelectedImage] = useState(null);
-	const [image, setImage] = useState(null);
+	const [selectedFile, setSelectedFile] = useState('');
+	const [selectedFileName, setSelectedFileName] = useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const handleSubmit = async (values) => {
 		setIsLoading(true);
 		const formData = new FormData();
 		const data = {
-			image: image,
+			image: selectedFile,
 			name: values.name,
 			address: values.address,
 			phone: values.phone,
@@ -58,16 +59,16 @@ const UpdateProfile = () => {
 				dispatch(login(data));
 			})
 			.catch((error) => {
+				console.log(error);
 				toast.error(
 					error
-						? error?.response?.data?.message ||
+						? error?.response?.error || error?.response?.data?.message ||
 								error?.response?.data?.error.message ||
 								error?.message
 						: error?.message
 				);
-				console.log(error);
-				setIsLoading(false);
 			});
+		setIsLoading(false);
 	};
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -75,7 +76,8 @@ const UpdateProfile = () => {
 	const handleImageChange = (event) => {
 		const file = event.target.files[0];
 		setSelectedImage(URL.createObjectURL(file));
-		setImage('image', file);
+		setSelectedFile(file);
+		setSelectedFileName(file?.name);
 	};
 	return (
 		<div className="max-w-screen-2xl">
@@ -116,34 +118,44 @@ const UpdateProfile = () => {
 											<div className="w-full text-center">
 												<label
 													tabIndex="0"
-													className="flex flex-col w-full h-32 px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer "
+													className="flex flex-col w-full h-fit px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer "
 												>
-													<span className="mx-auto flex justify-center">
-														<svg
-															stroke="currentColor"
-															fill="none"
-															strokeWidth="2"
-															viewBox="0 0 24 24"
-															strokeLinecap="round"
-															strokeLinejoin="round"
-															className="text-3xl text-emerald-500"
-															height="1em"
-															width="1em"
-															xmlns="http://www.w3.org/2000/svg"
-														>
-															<polyline points="16 16 12 12 8 16"></polyline>
-															<line x1="12" y1="12" x2="12" y2="21"></line>
-															<path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
-															<polyline points="16 16 12 12 8 16"></polyline>
-														</svg>
-													</span>
-													<p className="text-sm mt-2 text-black">
-														Drag your image here
-													</p>
-													<em className="text-xs text-gray-400">
-														(Only *.jpeg and *.png images will be accepted)
-													</em>
-
+													{' '}
+													{selectedImage ? (
+														<img
+															src={selectedImage}
+															alt="Selected"
+															className="max-h-32 max-w-32 mx-auto"
+														/>
+													) : (
+														<>
+															<span className="mx-auto flex justify-center">
+																<svg
+																	stroke="currentColor"
+																	fill="none"
+																	strokeWidth="2"
+																	viewBox="0 0 24 24"
+																	strokeLinecap="round"
+																	strokeLinejoin="round"
+																	className="text-3xl text-emerald-500"
+																	height="1em"
+																	width="1em"
+																	xmlns="http://www.w3.org/2000/svg"
+																>
+																	<polyline points="16 16 12 12 8 16"></polyline>
+																	<line x1="12" y1="12" x2="12" y2="21"></line>
+																	<path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"></path>
+																	<polyline points="16 16 12 12 8 16"></polyline>
+																</svg>
+															</span>
+															<p className="text-sm mt-2 text-black">
+																Drag your image here
+															</p>
+															<em className="text-xs text-gray-400">
+																Only *.jpeg and *.png images will be accepted
+															</em>
+														</>
+													)}
 													<Field
 														id="image"
 														name="image"
@@ -158,15 +170,9 @@ const UpdateProfile = () => {
 
 												<aside className="flex flex-row flex-wrap mt-4">
 													<div className="inline-flex border rounded-md border-gray-100 w-24 max-h-24 p-2">
-														{/* Display the selected image */}
-														{selectedImage && (
-															<img
-																src={selectedImage}
-																alt="Selected"
-																width="200"
-																height="200"
-															/>
-														)}
+														<p className="text-semibold text-sm">
+															{selectedFileName && selectedFileName}
+														</p>
 													</div>
 												</aside>
 											</div>

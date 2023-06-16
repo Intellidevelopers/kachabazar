@@ -1,6 +1,6 @@
 import React from "react";
 
-const Table = ({title,data,children}) => {
+const Table = ({title, data, children}) => {
   return (
     <div className="max-w-screen-2xl mx-auto ">
       <div className="rounded-md ">
@@ -28,7 +28,7 @@ const Table = ({title,data,children}) => {
                     </tr>
                   </tbody>
                 </table>
-              </div>
+              </div> 
             </div>
           </div>
         </div>

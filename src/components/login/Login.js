@@ -28,7 +28,6 @@ const Login = ({ setIsOpenRegister }) => {
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				console.log(data);
 				toast.success(data.message);
 				localStorage.setItem('user', JSON.stringify(data));
 				dispatch(login(data));
@@ -44,7 +43,6 @@ const Login = ({ setIsOpenRegister }) => {
 						: error?.message
 				);
 				setIsLoading(false);
-				console.log(error);
 			});
 	};
 	return (
@@ -138,6 +136,7 @@ const Login = ({ setIsOpenRegister }) => {
 															id="email"
 															name="email"
 															placeholder="Email"
+															autoComplete
 															type="email"
 														/>
 													</div>

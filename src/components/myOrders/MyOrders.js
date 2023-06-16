@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react'
 import Table from '../table/Table'
-
-
 const MyOrders = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
