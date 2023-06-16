@@ -58,13 +58,13 @@ const UpdateProfile = () => {
 				dispatch(login(data));
 			})
 			.catch((error) => {
-				console.log(formData);
-				// toast.error(
-				// 	error
-				// 		? error?.response?.data?.message ||
-				// 				error?.response?.data?.error.message
-				// 		: error?.message
-				// );
+				toast.error(
+					error
+						? error?.response?.data?.message ||
+								error?.response?.data?.error.message ||
+								error?.message
+						: error?.message
+				);
 				console.log(error);
 				setIsLoading(false);
 			});
@@ -91,7 +91,7 @@ const UpdateProfile = () => {
 
 			<Formik
 				initialValues={{
-					image: user?.user?.image,
+					image: user?.user?.image?.url,
 					name: user?.user?.name,
 					address: user?.user?.address,
 					phone: user?.user?.phone,

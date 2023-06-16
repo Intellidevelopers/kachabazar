@@ -25,11 +25,12 @@ const UpdatePassword = () => {
 			confirmPassword: values.confirmPassword,
 			token: user?.token,
 			id: user?.user?._id,
+			city: 'lagos, Nigeria',
+			country: ' Nigeria',
 		};
-		console.log(data);
 		setIsLoading(true);
 		axios
-			.post(`${process.env.REACT_APP_BASE_API_URL}/user/update-password`, data)
+			.put(`${process.env.REACT_APP_BASE_API_URL}/user/update-profile`, data)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
@@ -38,8 +39,10 @@ const UpdatePassword = () => {
 			.catch((error) => {
 				toast.error(
 					error
-						? error?.response?.data?.message ||
-								error?.response?.data?.error.message
+						? error?.response?.data?.error ||
+								error?.response?.data?.message ||
+								error?.response?.data?.error.message ||
+								error?.message
 						: error?.message
 				);
 				setIsLoading(false);
@@ -66,7 +69,7 @@ const UpdatePassword = () => {
 				initialValues={{
 					password: '',
 					confirmPassword: '',
-					email: '',
+					email: user?.user?.email,
 				}}
 				validationSchema={SignupSchema}
 				onSubmit={handleSubmit}

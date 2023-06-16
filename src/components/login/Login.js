@@ -28,6 +28,7 @@ const Login = ({ setIsOpenRegister }) => {
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
+				console.log(data);
 				toast.success(data.message);
 				localStorage.setItem('user', JSON.stringify(data));
 				dispatch(login(data));
@@ -36,7 +37,8 @@ const Login = ({ setIsOpenRegister }) => {
 			.catch((error) => {
 				toast.error(
 					error
-						? error?.response?.data?.message ||
+						? error?.response?.data?.error ||
+								error?.response?.data?.message ||
 								error?.response?.data?.error.message ||
 								error?.message
 						: error?.message

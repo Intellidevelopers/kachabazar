@@ -7,7 +7,6 @@ import { isLoginAction } from '../../store/reducers/isOpenSlice';
 const User = () => {
 	const dispatch = useDispatch();
 	const handleLogOut = () => {
-		console.log('user logout');
 		dispatch(logout(''));
 		dispatch(isLoginAction(true));
 	};

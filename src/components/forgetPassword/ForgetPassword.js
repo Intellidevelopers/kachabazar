@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 // import { Dialog, Transition } from '@headlessui/react';
 import { Formik, Field, Form } from 'formik';
+import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import * as Yup from 'yup';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
-// import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ForgetPassword = ({ setIsOpenRegister }) => {
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
+	const navigate = useNavigate();
 	// const { isOpen } = useSelector((state) => state.isOpen);
 	// const { user } = useSelector((state) => state.user);
 	const LoginSchema = Yup.object().shape({
@@ -20,24 +21,23 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 		// console.log(isValidating);
 		setIsLoading(true);
 		axios
-			.post(
-				`${process.env.REACT_APP_BASE_API_URL}/user/forget-password`,
-				values
-			)
+			.post(`${process.env.REACT_APP_BASE_API_URL}/user/send-otp`, values)
 			.then((res) => res.data)
 			.then((data) => {
 				setIsLoading(false);
-				toast.success(data.message);
-				toast.success('Password reset link sent successfully');
+				toast.success(data.message || `otp sent successfully`);
+				dispatch(isLoginAction(false));
+				console.log(data?.token);
 				setTimeout(() => {
-					dispatch(isLoginAction(false));
+					navigate(`/verify-otp/${data?.token}`);
 				}, 2000);
 			})
 			.catch((error) => {
 				toast.error(
 					error
 						? error?.response?.data?.message ||
-								error?.response?.data?.error.message
+								error?.response?.data?.error.message ||
+								error?.message
 						: error?.message
 				);
 				setIsLoading(false);
@@ -50,7 +50,7 @@ const ForgetPassword = ({ setIsOpenRegister }) => {
 			<div className="text-center mb-6">
 				<h2 className="text-3xl font-bold text-black">Forget password</h2>
 				<p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
-					Enter your registered email address for password reset link
+					Enter your registered email address for one time pin
 				</p>
 			</div>
 

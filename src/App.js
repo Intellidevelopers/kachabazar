@@ -19,6 +19,7 @@ import Register from './components/register/Register';
 import ForgetPassword from './components/forgetPassword/ForgetPassword';
 import ResetPassword from './components/forgetPassword/ResetPassword';
 import ChangePassword from './components/forgetPassword/ChangePassword';
+import VerifyOtp from './components/verifyOtp/VerifyOtp';
 import { Fragment, useState } from 'react';
 import User from './components/user/User';
 import Dashboard from './components/dashboard/Dashboard';
@@ -53,6 +54,7 @@ function App() {
 						path={'reset-password/:token'}
 						element={<ResetPassword setIsOpenRegister={setIsOpenRegister} />}
 					/>
+					<Route path={'verify-otp/:token'} element={<VerifyOtp />} />
 					<Route path="change-password/:token" element={<ChangePassword />} />
 					<Route element={<ProtectedRoutes />}>
 						<Route path="checkout" element={<Checkout />} />

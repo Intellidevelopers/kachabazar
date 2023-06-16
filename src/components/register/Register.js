@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 // import validator from 'validator';
 import { useDispatch } from 'react-redux';
 import { isLoginAction } from '../../store/reducers/isOpenSlice';
-import { login } from '../../store/reducers/userSlice';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
@@ -33,11 +32,8 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 			.post(`${process.env.REACT_APP_BASE_API_URL}/user/signup`, values)
 			.then((res) => res.data)
 			.then((data) => {
-				localStorage.setItem('user', JSON.stringify(data));
-				dispatch(login(data));
-				console.log(data);
-				toast.success('signup successfull');
-				dispatch(isLoginAction(false));
+				toast.success('Sign up successfull');
+				dispatch(isLoginAction(true));
 				setIsOpenRegister(false);
 				setIsLoading(false);
 			})
@@ -45,7 +41,8 @@ const Register = ({ isOpen, setIsOpenRegister }) => {
 				toast.error(
 					error
 						? error?.response?.data?.message ||
-								error?.response?.data?.error.message
+								error?.response?.data?.error.message ||
+								error?.message
 						: error?.message
 				);
 				setIsLoading(false);

@@ -44,7 +44,8 @@ const ChangePassword = () => {
 				toast.error(
 					error
 						? error?.response?.data?.message ||
-								error?.response?.data?.error.message
+								error?.response?.data?.error.message ||
+								error?.message
 						: error?.message
 				);
 				setIsLoading(false);
