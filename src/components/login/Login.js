@@ -209,7 +209,7 @@ const Login = ({ setIsOpenRegister }) => {
 													disabled={isLoading}
 													className="w-full text-center py-3 rounded bg-emerald-500 text-white hover:bg-emerald-600 transition-all focus:outline-none my-1"
 												>
-													{!isLoading ? 'Login' : 'Logining you in'}
+													{!isLoading ? 'Login' : 'Login you in'}
 												</button>
 											</div>
 										</Form>
