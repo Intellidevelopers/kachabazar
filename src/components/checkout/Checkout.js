@@ -33,16 +33,25 @@ function Checkout() {
 	const { ...item } = useSelector((state) => state.cart);
 	const { user } = useSelector((state) => state.user);
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
+	const [shippingPrice, setShippingPrice] = useState('50')
 	const onchangeSubmit = (value) => {
 		if (!cartTotalAmount > 0) {
 			return toast.error('add item to cart');
 		}
+
+		if (value.shippingOption === "fedx") {
+			setShippingPrice(50)
+		} else {
+			setShippingPrice(60)
+			
+		}
 		const data = {
 			createdDate: new Date(),
 			updatedDate: new Date(),
-			invoce: Invoice,
+			invoice: Invoice,
+			shippingPrice,
 			id: Id,
-			cart: item,
+			cart: item.cartItems,
 			...value,
 		};
 		if (data.paymentMethod === 'COD') {
