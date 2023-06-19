@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store';
 import { getTotals } from './store/reducers/cartSlice';
 import { Toaster } from 'react-hot-toast';
+import { PayPalScriptProvider } from '@paypal/react-paypal-js';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 store.dispatch(getTotals());
@@ -16,7 +17,9 @@ root.render(
 		<BrowserRouter>
 			<Provider store={store}>
 				<Toaster />
-				<App />
+				<PayPalScriptProvider deferLoading={true}>
+					<App />
+				</PayPalScriptProvider>
 			</Provider>
 		</BrowserRouter>
 	</React.StrictMode>

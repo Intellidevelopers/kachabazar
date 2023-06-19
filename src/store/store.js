@@ -13,11 +13,7 @@ export const store = configureStore({
 		cart: cartReducer,
 		search: searchReducer,
 		isOpen: isOpenReducer,
-		user: authReducer, // Add the authReducer to the store
+		user: authReducer, // Add the authReducer
 	},
 	devTools: true,
 });
-
-// import { authReducer } from './reducers';
-
-// const store = createStore(authReducer);

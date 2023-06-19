@@ -24,6 +24,7 @@ import { Fragment, useState } from 'react';
 import User from './components/user/User';
 import Dashboard from './components/dashboard/Dashboard';
 import MyOrders from './components/myOrders/MyOrders';
+// import Paypal from './components/paypal/Paypal';
 import UpdateProfile from './components/updateProfile/UpdateProfile';
 import UpdatePassword from './components/updatePassword/UpdatePassword';
 import Offers from './pages/Offers';

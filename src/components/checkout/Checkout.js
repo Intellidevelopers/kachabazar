@@ -1,11 +1,13 @@
 import { Field, Form, Formik } from 'formik';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import OrderSummary from '../orderSummary/OrderSummary';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import randomId from 'random-id';
-
+import axios from 'axios';
+import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
+import { toast } from 'react-hot-toast';
 const SignupSchema = Yup.object().shape({
 	firstName: Yup.string().required('First Name is required!'),
 	lastName: Yup.string().required('Last name is required!'),
@@ -27,11 +29,14 @@ function Checkout() {
 	let navigate = useNavigate();
 	var Id = randomId(30, 'aA0');
 	var Invoice = randomId(5, '0');
-
+	const { cartTotalAmount } = useSelector((state) => state.cart);
 	const { ...item } = useSelector((state) => state.cart);
 	const { user } = useSelector((state) => state.user);
-	const dispatch = useDispatch();
+	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 	const onchangeSubmit = (value) => {
+		if (!cartTotalAmount > 0) {
+			return toast.error('add item to cart');
+		}
 		const data = {
 			createdDate: new Date(),
 			updatedDate: new Date(),
@@ -40,11 +45,78 @@ function Checkout() {
 			cart: item,
 			...value,
 		};
+		if (data.paymentMethod === 'COD') {
+			console.log('COD payment');
+			console.log(data);
+			localStorage.setItem(Id, JSON.stringify(data));
+			// navigate(`./order/${Id}`);
+		} else {
+			console.log('paypal payment');
+		}
+	};
+	useEffect(() => {
+		paypalDispatch({
+			type: 'resetOptions',
+			value: {
+				'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
+				currency: 'USD',
+			},
+		});
+	}, [paypalDispatch]);
 
-		localStorage.setItem(Id, JSON.stringify(data));
-		setTimeout(() => {
-			navigate('/order/' + Id);
-		}, 2000);
+	function createOrder(data, actions) {
+		return actions.order
+			.create({
+				purchase_units: [
+					{
+						amount: {
+							value: cartTotalAmount,
+						},
+					},
+				],
+			})
+			.then((orderId) => {
+				return orderId;
+			});
+	}
+
+	function onApprove(data, actions) {
+		return actions.order.capture().then((details) => {
+			try {
+				const name = details.payer.name.given_name;
+				alert(`Transaction completed by ${name}`);
+				axios
+					.post(`${process.env.REACT_APP_BASE_API_URL}/order/pay`, data)
+					.then((res) => res.data)
+					.then((data) => {
+						toast.success(data.message);
+						localStorage.setItem('order', JSON.stringify(data));
+						navigate('/order/' + Id);
+					})
+					.catch((error) => {
+						toast.error(
+							error
+								? error?.response?.data?.error ||
+										error?.response?.data?.message ||
+										error?.response?.data?.error.message ||
+										error?.message
+								: error?.message
+						);
+					});
+			} catch (error) {
+				console.log(error);
+			}
+		});
+	}
+	function onError(error) {
+		return console.log('an error occur', error);
+	}
+	const [paymentMethod, setPaymentMethod] = useState('');
+
+	const handelePaymentMethod = (e) => {
+		const selectedMethod = e.target.value;
+		console.log(selectedMethod);
+		setPaymentMethod(selectedMethod);
 	};
 
 	return (
@@ -60,9 +132,9 @@ function Checkout() {
 									email: user.user.email,
 									phoneNumber: user?.user?.phone,
 									streetAddress: user?.user?.address,
-									city: 'istanbul',
-									country: 'kadıköy',
-									zipPostal: '3400',
+									city: 'abuja',
+									country: 'Nigeria',
+									zipPostal: '900101',
 									shippingOption: 'FedEx',
 									paymentMethod: 'COD',
 								}}
@@ -428,6 +500,7 @@ function Checkout() {
 																		type="radio"
 																		name="paymentMethod"
 																		value="COD"
+																		onChange={handelePaymentMethod}
 																		className="form-radio outline-none focus:ring-0 text-emerald-500"
 																	/>
 																</div>
@@ -466,6 +539,7 @@ function Checkout() {
 																		type="radio"
 																		name="paymentMethod"
 																		value="Card"
+																		onChange={handelePaymentMethod}
 																		className="form-radio outline-none focus:ring-0 text-emerald-500"
 																	/>
 																</div>
@@ -477,7 +551,6 @@ function Checkout() {
 															</span>
 														)}
 													</div>
-													<div></div>
 												</div>
 											</div>
 											<div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
@@ -516,33 +589,58 @@ function Checkout() {
 													</Link>
 												</div>
 												<div className="col-span-6 sm:col-span-3">
-													<button
-														type="submit"
-														disabled=""
-														className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
-													>
-														Confirm Order{' '}
-														<span className="text-xl ml-2">
-															{' '}
-															<svg
-																stroke="currentColor"
-																fill="currentColor"
-																strokeWidth="0"
-																viewBox="0 0 512 512"
-																height="1em"
-																width="1em"
-																xmlns="http://www.w3.org/2000/svg"
-															>
-																<path
-																	fill="none"
-																	strokeLinecap="round"
-																	strokeLinejoin="round"
-																	strokeWidth="48"
-																	d="M268 112l144 144-144 144m124-144H100"
-																></path>
-															</svg>
-														</span>
-													</button>
+													{paymentMethod === 'Card' ? (
+														<>
+															{isPending ? (
+																<button
+																	type="button"
+																	className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
+																	disabled
+																>
+																	<svg
+																		className="animate-spin h-5 w-5 mr-3 "
+																		viewBox="0 0 24 24"
+																	></svg>
+																	Processing...
+																</button>
+															) : (
+																<PayPalButtons
+																	style={{ layout: 'horizontal' }}
+																	createOrder={createOrder}
+																	onApprove={onApprove}
+																	onError={onError}
+																/>
+															)}{' '}
+														</>
+													) : (
+														<button
+															type="submit"
+															disabled=""
+															className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
+														>
+															Confirm Order{' '}
+															<span className="text-xl ml-2">
+																{' '}
+																<svg
+																	stroke="currentColor"
+																	fill="currentColor"
+																	strokeWidth="0"
+																	viewBox="0 0 512 512"
+																	height="1em"
+																	width="1em"
+																	xmlns="http://www.w3.org/2000/svg"
+																>
+																	<path
+																		fill="none"
+																		strokeLinecap="round"
+																		strokeLinejoin="round"
+																		strokeWidth="48"
+																		d="M268 112l144 144-144 144m124-144H100"
+																	></path>
+																</svg>
+															</span>
+														</button>
+													)}
 												</div>
 											</div>
 										</Form>
