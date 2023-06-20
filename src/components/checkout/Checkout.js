@@ -6,23 +6,27 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import randomId from 'random-id';
 import axios from 'axios';
-import { PayPalButtons, usePayPalScriptReducer } from '@paypal/react-paypal-js';
 import { toast } from 'react-hot-toast';
+import Payment from '../payment/Payment';
 const SignupSchema = Yup.object().shape({
 	firstName: Yup.string().required('First Name is required!'),
 	lastName: Yup.string().required('Last name is required!'),
 	email: Yup.string()
 		.email('Invalid email')
 		.required('Email address is required!'),
-	phoneNumber: Yup.string().required('Phone number is required!'),
-	streetAddress: Yup.string().required('Street address is required!'),
+	phone: Yup.string().required('Phone number is required!'),
+	address: Yup.string().required('Street address is required!'),
 	city: Yup.string().required('City is required!'),
 	country: Yup.string().required('Country is required!'),
-	zipPostal: Yup.string().required('ZIP / Postal is required'),
+	zipCode: Yup.string().required('ZIP / Postal is required'),
 	shippingOption: Yup.string().required('Shipping Option is required!'),
 	paymentMethod: Yup.string().required('Payment Method is required'),
 });
 function Checkout() {
+	let [isPayment, setIsPayment] = useState(false);
+	let [order, setOrder] = useState('');
+	let [isloading, setIsLoading] = useState(false);
+	let [isError, setIsError] = useState(false);
 	useEffect(() => {
 		window.scrollTo(0, 0);
 	}, []);
@@ -32,100 +36,65 @@ function Checkout() {
 	const { cartTotalAmount } = useSelector((state) => state.cart);
 	const { ...item } = useSelector((state) => state.cart);
 	const { user } = useSelector((state) => state.user);
-	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-	const [shippingPrice, setShippingPrice] = useState('50')
+	const [shippingPrice, setShippingPrice] = useState('50');
 	const onchangeSubmit = (value) => {
 		if (!cartTotalAmount > 0) {
 			return toast.error('add item to cart');
 		}
 
-		if (value.shippingOption === "fedx") {
-			setShippingPrice(50)
+		if (value.shippingOption === 'fedx') {
+			setShippingPrice(50);
 		} else {
-			setShippingPrice(60)
-			
+			setShippingPrice(60);
 		}
 		const data = {
 			createdDate: new Date(),
 			updatedDate: new Date(),
 			invoice: Invoice,
 			shippingPrice,
+			userId: user?.user?._id,
 			id: Id,
 			cart: item.cartItems,
 			...value,
 		};
 		if (data.paymentMethod === 'COD') {
-			console.log('COD payment');
 			console.log(data);
-			localStorage.setItem(Id, JSON.stringify(data));
-			// navigate(`./order/${Id}`);
+			axios
+				.post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, { data })
+				.then((res) => res.data)
+				.then((data) => {
+					console.log(data);
+					setIsLoading(false);
+					toast.success(data.message);
+					navigate(`./order/${Id}`);
+				})
+				.catch((error) => {
+					console.log(error);
+					toast.error(
+						error
+							? error?.response?.data?.error ||
+									error?.response?.data?.message ||
+									error?.response?.data?.error.message ||
+									error?.message
+							: error?.message
+					);
+					setIsError(
+						error
+							? error?.response?.data?.error ||
+									error?.response?.data?.message ||
+									error?.response?.data?.error.message ||
+									error?.message
+							: error?.message
+					);
+					setTimeout(() => {
+						setIsError(false);
+					}, 2000);
+				});
 		} else {
-			console.log('paypal payment');
+			console.log('other payment');
+			setIsPayment(true);
+			setOrder(data);
 		}
-	};
-	useEffect(() => {
-		paypalDispatch({
-			type: 'resetOptions',
-			value: {
-				'client-id': process.env.REACT_APP_PAYPAL_CLIENT_ID,
-				currency: 'USD',
-			},
-		});
-	}, [paypalDispatch]);
-
-	function createOrder(data, actions) {
-		return actions.order
-			.create({
-				purchase_units: [
-					{
-						amount: {
-							value: cartTotalAmount,
-						},
-					},
-				],
-			})
-			.then((orderId) => {
-				return orderId;
-			});
-	}
-
-	function onApprove(data, actions) {
-		return actions.order.capture().then((details) => {
-			try {
-				const name = details.payer.name.given_name;
-				alert(`Transaction completed by ${name}`);
-				axios
-					.post(`${process.env.REACT_APP_BASE_API_URL}/order/pay`, data)
-					.then((res) => res.data)
-					.then((data) => {
-						toast.success(data.message);
-						localStorage.setItem('order', JSON.stringify(data));
-						navigate('/order/' + Id);
-					})
-					.catch((error) => {
-						toast.error(
-							error
-								? error?.response?.data?.error ||
-										error?.response?.data?.message ||
-										error?.response?.data?.error.message ||
-										error?.message
-								: error?.message
-						);
-					});
-			} catch (error) {
-				console.log(error);
-			}
-		});
-	}
-	function onError(error) {
-		return console.log('an error occur', error);
-	}
-	const [paymentMethod, setPaymentMethod] = useState('');
-
-	const handelePaymentMethod = (e) => {
-		const selectedMethod = e.target.value;
-		console.log(selectedMethod);
-		setPaymentMethod(selectedMethod);
 	};
 
 	return (
@@ -138,12 +107,12 @@ function Checkout() {
 								initialValues={{
 									firstName: user?.user?.name,
 									lastName: 'kaya',
-									email: user.user.email,
-									phoneNumber: user?.user?.phone,
-									streetAddress: user?.user?.address,
+									email: user?.user?.email,
+									phone: user?.user?.phone,
+									address: user?.user?.address,
 									city: 'abuja',
 									country: 'Nigeria',
-									zipPostal: '900101',
+									zipCode: '900101',
 									shippingOption: 'FedEx',
 									paymentMethod: 'COD',
 								}}
@@ -509,7 +478,6 @@ function Checkout() {
 																		type="radio"
 																		name="paymentMethod"
 																		value="COD"
-																		onChange={handelePaymentMethod}
 																		className="form-radio outline-none focus:ring-0 text-emerald-500"
 																	/>
 																</div>
@@ -548,7 +516,6 @@ function Checkout() {
 																		type="radio"
 																		name="paymentMethod"
 																		value="Card"
-																		onChange={handelePaymentMethod}
 																		className="form-radio outline-none focus:ring-0 text-emerald-500"
 																	/>
 																</div>
@@ -562,6 +529,9 @@ function Checkout() {
 													</div>
 												</div>
 											</div>
+											{isError && (
+												<p className="text-red-500 text-sm my-1">{isError}</p>
+											)}
 											<div className="grid grid-cols-6 gap-4 lg:gap-6 mt-10">
 												<div className="col-span-6 sm:col-span-3">
 													<Link
@@ -598,58 +568,33 @@ function Checkout() {
 													</Link>
 												</div>
 												<div className="col-span-6 sm:col-span-3">
-													{paymentMethod === 'Card' ? (
-														<>
-															{isPending ? (
-																<button
-																	type="button"
-																	className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
-																	disabled
-																>
-																	<svg
-																		className="animate-spin h-5 w-5 mr-3 "
-																		viewBox="0 0 24 24"
-																	></svg>
-																	Processing...
-																</button>
-															) : (
-																<PayPalButtons
-																	style={{ layout: 'horizontal' }}
-																	createOrder={createOrder}
-																	onApprove={onApprove}
-																	onError={onError}
-																/>
-															)}{' '}
-														</>
-													) : (
-														<button
-															type="submit"
-															disabled=""
-															className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
-														>
-															Confirm Order{' '}
-															<span className="text-xl ml-2">
-																{' '}
-																<svg
-																	stroke="currentColor"
-																	fill="currentColor"
-																	strokeWidth="0"
-																	viewBox="0 0 512 512"
-																	height="1em"
-																	width="1em"
-																	xmlns="http://www.w3.org/2000/svg"
-																>
-																	<path
-																		fill="none"
-																		strokeLinecap="round"
-																		strokeLinejoin="round"
-																		strokeWidth="48"
-																		d="M268 112l144 144-144 144m124-144H100"
-																	></path>
-																</svg>
-															</span>
-														</button>
-													)}
+													<button
+														type="submit"
+														disabled={isloading}
+														className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
+													>
+														Confirm Order{' '}
+														<span className="text-xl ml-2">
+															{' '}
+															<svg
+																stroke="currentColor"
+																fill="currentColor"
+																strokeWidth="0"
+																viewBox="0 0 512 512"
+																height="1em"
+																width="1em"
+																xmlns="http://www.w3.org/2000/svg"
+															>
+																<path
+																	fill="none"
+																	strokeLinecap="round"
+																	strokeLinejoin="round"
+																	strokeWidth="48"
+																	d="M268 112l144 144-144 144m124-144H100"
+																></path>
+															</svg>
+														</span>
+													</button>
 												</div>
 											</div>
 										</Form>
@@ -661,6 +606,7 @@ function Checkout() {
 					<OrderSummary />
 				</div>
 			</div>
+			<Payment setData={isPayment} setIsPayment={setIsPayment} order={order} />
 		</div>
 	);
 }
