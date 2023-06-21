@@ -11,26 +11,21 @@ export const StripeCheckout = ({ order }) => {
 	// const { user } = useSelector((state) => state.user);
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-		try {
-			const { error } = await elements.submit();
-			if (error) {
-				throw new Error(error.message);
-			}
+        try {
+            const { error } = await elements.submit();
+            if (error) {
+                throw new Error(error.message);
+            }
+            console.log(order.totalPrice);
 
-			const response = await fetch(
-				`${process.env.REACT_APP_BASE_API_URL}/create-stripe-payment`,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({ amount: order.totalPrice }),
-				}
-			);
-
+            const response = await axios.post(
+                `${process.env.REACT_APP_BASE_API_URL}/create-stripe-payment`,
+                { amount: order.totalPrice });
+			
 			if (!response.ok) {
 				throw new Error('Failed to create payment');
-			}
+            }
+            console.log(response)
 
 			const { client_secret } = await response.json();
 

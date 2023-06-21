@@ -1,10 +1,13 @@
 import React from 'react';
 
-const Table = ({ title, data, children, loading }) => {
+const Table = ({ title, data, loading, error }) => {
 	var formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'USD',
 	});
+	const handlePay = (item) => {
+		console.log(item);
+	};
 	return (
 		<div className="max-w-screen-2xl mx-auto ">
 			<div className="rounded-md ">
@@ -49,33 +52,52 @@ const Table = ({ title, data, children, loading }) => {
 										</tr>
 									</thead>
 									<tbody className="bg-white divide-y divide-gray-200">
-										{data.map((item, index) => (
-											<tr key={index}>
-												<th className="px-6 py-1 whitespace-nowrap font-normal text-gray-500 text-left">
-													{index + 1}
-												</th>
-												<td className="px-6 py-1 whitespace-nowrap font-normal text-gray-500">
-													{item.id}
-												</td>
-												<td className="px-6 py-1 whitespace-nowrap font-bold text-center">
-													{formatter.format(item.tatal)}
-												</td>
-												<td className="px-6 py-1 whitespace-nowrap font-bold text-center font-DejaVu">
-													{item.date}
-												</td>
-												<td className="px-6 py-1 whitespace-nowrap text-right font-bold font-DejaVu k-grid">
-													<p
-														className={`${
-															item.status === 'pending'
-																? `text-yellow-500`
-																: 'text-green-500'
-														} m-1 rounded-md `}
-													>
-														{item.status}
-													</p>
-												</td>
-											</tr>
-										))}
+										{loading && (
+											<p className="text-blue-500 text-xl">Loading</p>
+										)}
+
+										{data &&
+											data.map((item, index) => (
+												<tr key={index}>
+													<th className="px-6 py-1 whitespace-nowrap font-normal text-gray-500 text-left">
+														{index + 1}
+													</th>
+													<td className="px-6 py-1 whitespace-nowrap font-normal text-gray-500">
+														{item._id}
+													</td>
+													<td className="px-6 py-1 whitespace-nowrap font-bold text-center">
+														{formatter.format(item.totalPrice)}
+													</td>
+													<td className="px-6 py-1 whitespace-nowrap font-bold text-center font-DejaVu">
+														{item.createdAt}
+													</td>
+													<td className="px-6 py-1 whitespace-nowrap text-right font-bold font-DejaVu k-grid">
+														{!item?.isPaid ? (
+															<button
+																onClick={handlePay}
+																className={`text-blue-500 m-1 rounded-md`}
+															>
+																{item.Pay}
+															</button>
+														) : (
+															<p
+																className={`${
+																	item.isDelivered === 'processing'
+																		? `text-yellow-500`
+																		: 'text-green-500'
+																} m-1 rounded-md capitalize`}
+															>
+																{item.isDelivered}
+															</p>
+														)}
+													</td>
+												</tr>
+											))}
+										{error && (
+											<p className="text-red-500 text-xl text-center">
+												{error}
+											</p>
+										)}
 									</tbody>
 								</table>
 							</div>
