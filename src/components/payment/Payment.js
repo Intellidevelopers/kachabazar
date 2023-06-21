@@ -28,15 +28,16 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 	}, [paypalDispatch]);
 
 	function createOrder(data, actions) {
+		console.log(data);
 		return actions.order
 			.create({
 				application_context: {
 					shipping_preference: 'NO_SHIPPING',
 				},
 				payer: {
-					email_address: data?.email,
+					email_address: order?.email,
 					phone: {
-						phone_number: data?.phone,
+						phone_number: order?.phone,
 					},
 					shipping: {
 						name: {
@@ -44,7 +45,7 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 							lastName: data?.lastName,
 						},
 						address: {
-							address_line_1: '',
+							address_line_1: order.address,
 							admin_area_1: data.address,
 							postal_code: data?.postal_code,
 							country_code: 'US',
@@ -54,8 +55,7 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 				purchase_units: [
 					{
 						amount: {
-							value: '200',
-							// value: cartTotalAmount,
+							value: order.totalAmount,
 						},
 					},
 				],

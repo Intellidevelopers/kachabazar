@@ -2,56 +2,61 @@ import React, { useState } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+// import { useSelector } from 'react-redux';
 
 export const StripeCheckout = ({ order }) => {
 	const stripe = useStripe();
 	const elements = useElements();
-
 	const [errorMessage, setErrorMessage] = useState(null);
-
+	// const { user } = useSelector((state) => state.user);
 	const handleSubmit = async (event) => {
 		event.preventDefault();
-
-		if (elements == null) {
-			return;
-		}
-
-		// Trigger form validation and wallet collection
-		const { error: submitError } = await elements.submit();
-		if (submitError) {
-			console.log(submitError);
-			setErrorMessage(submitError.message);
-			return;
-		}
-
-		// Create the PaymentIntent and obtain clientSecret from your server endpoint
-		const { client_secret } = await fetch(
-			`${process.env.REACT_APP_BASE_API_URL}/create-stripe-payment`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: 'Bearer ',
-				},
-				body: JSON.stringify({ amount: order.totalPrice }),
+		try {
+			const { error } = await elements.submit();
+			if (error) {
+				throw new Error(error.message);
 			}
-		).then((res) => res.json());
 
-		const { paymentIntent } = await stripe.confirmCardPayment(client_secret, {
-			payment_method: {
-				card: elements.getElement(CardElement),
-			},
-		});
+			const response = await fetch(
+				`${process.env.REACT_APP_BASE_API_URL}/create-stripe-payment`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ amount: order.totalPrice }),
+				}
+			);
 
-		if (paymentIntent) {
-			axios
-				.post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, order)
-				.then((res) => {
-					console.log(res);
-					toast.success(`Payment ${paymentIntent.status}`);
-				});
+			if (!response.ok) {
+				throw new Error('Failed to create payment');
+			}
+
+			const { client_secret } = await response.json();
+
+			const { paymentIntent } = await stripe.confirmCardPayment(client_secret, {
+				payment_method: {
+					card: elements.getElement(CardElement),
+				},
+			});
+
+			if (paymentIntent) {
+				const res = await axios.post(
+					`${process.env.REACT_APP_BASE_API_URL}/order/create`,
+					{
+						...order,
+						paymentMethod: 'stripe',
+					}
+				);
+				console.log(res);
+				toast.success(`Payment ${paymentIntent.status}`);
+			}
+		} catch (error) {
+			console.log(error);
+			setErrorMessage(error.message);
 		}
 	};
+
 	return (
 		<form onSubmit={handleSubmit} className="mt-1">
 			<button
