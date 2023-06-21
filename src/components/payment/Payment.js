@@ -96,26 +96,18 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 	function onError(error) {
 		return console.log('an error occur', error);
 	}
-	// stripe Payment
-	const options = {
-		mode: 'payment',
-		amount: order.totalPrice,
-		currency: 'usd',
-	};
-	const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISH_KEY);
-	const handleOverlayClick = (event) => {
-		// Prevent closing the dialog on click
-		event.stopPropagation();
-	};
+	// const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISH_KEY);
+	const stripePromise = loadStripe(
+		'pk_test_51NBaTpCCrWcBmYv2xmC9Db65X1M6cyftLwspR6b8z3Xkg5Q0XVX07ZJ2d7286rqwrZrqJ7ZtbnF7Eb3xVVp0YciQ00AcgfSwvG'
+	);
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
 				static={true}
 				as="div"
 				className=" fixed inset-0 overflow-y-auto text-center z-30"
-				onClose={() => setIsPayment(false)}
+				onClose={() => {}}
 			>
-				<Dialog.Overlay onClick={handleOverlayClick} />
 				<div className="min-h-screen px-4">
 					<Transition.Child
 						as={Fragment}
@@ -145,47 +137,43 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 					>
 						<Dialog.Panel
 							className="
-                                inline-block w-full max-w-lg
-                                p-10 overflow-hidden text-left 
-                                align-middle transition-all transform 
-                                bg-white shadow-xl rounded-2xl "
-						></Dialog.Panel>
+								inline-block w-full max-w-lg
+								p-10 overflow-hidden text-left 
+								align-middle transition-all transform 
+								bg-white shadow-xl rounded-2xl "
+						>
+							<div className="overflow-hidden bg-white mx-auto">
+								<div className="text-center mb-6">
+									<h2 className="font-semibold text-black text-2xl text-center py-2 px-5 capitalize">
+										Select a Payment method
+									</h2>
+								</div>
+								<>
+									{isPending ? (
+										<button
+											type="button"
+											className="hover:border-gray-600 border border-gray-500 transition-all rounded py-3 text-center text-sm font-medium flex justify-center w-full"
+											disabled
+										>
+											Loading Paypal...
+										</button>
+									) : (
+										<PayPalButtons
+											style={{ layout: 'horizontal' }}
+											createOrder={createOrder}
+											onApprove={onApprove}
+											onError={onError}
+										/>
+									)}{' '}
+								</>
+								{/* stripe */}
+								<Elements stripe={stripePromise}>
+									<StripeCheckout order={order} />
+								</Elements>
+							</div>
+						</Dialog.Panel>
 					</Transition.Child>
-					<div className="overflow-hidden bg-white mx-auto ">
-						<div className="text-center mb-6">
-							<h2 className="text-3xl font-bold text-black Text-4xl text-center py-10 px-5 capitalize">
-								This is payment
-							</h2>
-						</div>
-						<>
-							{isPending ? (
-								<button
-									type="button"
-									className="bg-emerald-500 hover:bg-emerald-600 border border-emerald-500 transition-all rounded py-3 text-center text-sm  font-medium text-white flex justify-center w-full"
-									disabled
-								>
-									<svg
-										className="animate-spin h-5 w-5 mr-3 "
-										viewBox="0 0 24 24"
-									></svg>
-									Processing...
-								</button>
-							) : (
-								<PayPalButtons
-									style={{ layout: 'horizontal' }}
-									createOrder={createOrder}
-									onApprove={onApprove}
-									onError={onError}
-								/>
-							)}{' '}
-						</>
-						{/* stripe */}
-						<Elements stripe={stripePromise} options={options}>
-							<StripeCheckout />
-						</Elements>
-					</div>
 					<Transition.Child
-						as={Fragment}
 						enter="ease-out duration-300"
 						enterFrom="opacity-0"
 						enterTo="opacity-100"
@@ -194,7 +182,7 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 						leaveTo="opacity-0"
 					>
 						<div
-							onClose={() => setIsPayment(false)}
+							onClick={() => setIsPayment(false)}
 							className="absolute right-5 top-5"
 						>
 							<button

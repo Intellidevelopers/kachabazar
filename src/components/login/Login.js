@@ -86,7 +86,7 @@ const Login = ({ setIsOpenRegister }) => {
             align-middle transition-all transform 
             bg-white shadow-xl rounded-2xl "
 						>
-							<div className="overflow-hidden bg-white mx-auto ">
+							<div className="overflow-hidden bg-white mx-auto">
 								<div className="text-center mb-6">
 									<h2 className="text-3xl font-bold text-black">Login</h2>
 									<p className="text-sm md:text-base text-gray-500 mt-2 mb-8 sm:mb-10">
