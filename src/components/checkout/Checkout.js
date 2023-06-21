@@ -32,14 +32,13 @@ function Checkout() {
 	}, []);
 	let navigate = useNavigate();
 	var Id = randomId(30, 'aA0');
-	var Invoice = randomId(5, '0');
 	const { cartTotalAmount } = useSelector((state) => state.cart);
 	const { ...item } = useSelector((state) => state.cart);
 	const { user } = useSelector((state) => state.user);
 	const [shippingPrice, setShippingPrice] = useState('50');
 	const onchangeSubmit = (value) => {
-		if (!cartTotalAmount > 0) {
-			return toast.error('add item to cart');
+		if (!cartTotalAmount > 50) {
+			return toast.error('Order Items must worth more than $100');
 		}
 
 		if (value.shippingOption === 'fedx') {
@@ -50,26 +49,25 @@ function Checkout() {
 		const data = {
 			createdDate: new Date(),
 			updatedDate: new Date(),
-			invoice: Invoice,
+			invoice: Id,
 			shippingPrice,
 			userId: user?.user?._id,
 			id: Id,
 			cart: item.cartItems,
 			...value,
+			cartTotalAmount,
+			totalPrice: Number(cartTotalAmount + shippingPrice),
 		};
 		if (data.paymentMethod === 'COD') {
-			console.log(data);
 			axios
-				.post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, { data })
+				.post(`${process.env.REACT_APP_BASE_API_URL}/order/create`, data)
 				.then((res) => res.data)
 				.then((data) => {
-					console.log(data);
 					setIsLoading(false);
 					toast.success(data.message);
 					navigate(`./order/${Id}`);
 				})
 				.catch((error) => {
-					console.log(error);
 					toast.error(
 						error
 							? error?.response?.data?.error ||
@@ -91,7 +89,6 @@ function Checkout() {
 					}, 2000);
 				});
 		} else {
-			console.log('other payment');
 			setIsPayment(true);
 			setOrder(data);
 		}
@@ -106,7 +103,7 @@ function Checkout() {
 							<Formik
 								initialValues={{
 									firstName: user?.user?.name,
-									lastName: 'kaya',
+									lastName: '',
 									email: user?.user?.email,
 									phone: user?.user?.phone,
 									address: user?.user?.address,
@@ -606,7 +603,7 @@ function Checkout() {
 					<OrderSummary />
 				</div>
 			</div>
-			<Payment setData={isPayment} setIsPayment={setIsPayment} order={order} />
+			<Payment isOpen={isPayment} setIsPayment={setIsPayment} order={order} />
 		</div>
 	);
 }

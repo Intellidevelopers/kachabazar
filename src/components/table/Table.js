@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Table = ({ title, data, children }) => {
+const Table = ({ title, data, children, loading }) => {
 	var formatter = new Intl.NumberFormat('en-US', {
 		style: 'currency',
 		currency: 'USD',

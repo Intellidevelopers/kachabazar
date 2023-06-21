@@ -27,9 +27,12 @@ export const StripeCheckout = () => {
 		}
 
 		// Create the PaymentIntent and obtain clientSecret from your server endpoint
-		const res = await fetch('/create-intent', {
-			method: 'POST',
-		});
+		const res = await fetch(
+			`${process.env.REACT_APP_BASE_API_URL}/create-stripe-payment`,
+			{
+				method: 'POST',
+			}
+		);
 
 		const { client_secret: clientSecret } = await res.json();
 
@@ -44,8 +47,8 @@ export const StripeCheckout = () => {
 
 		if (result.error) {
 			setErrorMessage(result.error.message);
-        } else {
-            console.log(result);
+		} else {
+			console.log(result);
 		}
 	};
 

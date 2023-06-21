@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,8 +12,9 @@ import { Elements } from '@stripe/react-stripe-js';
 import { StripeCheckout } from './StripeCheckout';
 import { loadStripe } from '@stripe/stripe-js';
 
-const Payment = ({ isPayment, setData, setIsPayment }) => {
+const Payment = ({ isOpen, order, setIsPayment }) => {
 	let navigate = useNavigate();
+	console.log(order);
 	// paypal
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 	useEffect(() => {
@@ -98,19 +99,23 @@ const Payment = ({ isPayment, setData, setIsPayment }) => {
 	// stripe Payment
 	const options = {
 		mode: 'payment',
-		amount: 1099,
+		amount: order.totalPrice,
 		currency: 'usd',
-		// passing the client secret obtained from the server
-		clientSecret: process.env.REACT_APP_STRIPE_SECRET_KEY,
 	};
 	const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISH_KEY);
+	const handleOverlayClick = (event) => {
+		// Prevent closing the dialog on click
+		event.stopPropagation();
+	};
 	return (
-		<Transition appear show={setData} as={Fragment}>
+		<Transition appear show={isOpen} as={Fragment}>
 			<Dialog
+				static={true}
 				as="div"
 				className=" fixed inset-0 overflow-y-auto text-center z-30"
 				onClose={() => setIsPayment(false)}
 			>
+				<Dialog.Overlay onClick={handleOverlayClick} />
 				<div className="min-h-screen px-4">
 					<Transition.Child
 						as={Fragment}
@@ -147,9 +152,11 @@ const Payment = ({ isPayment, setData, setIsPayment }) => {
 						></Dialog.Panel>
 					</Transition.Child>
 					<div className="overflow-hidden bg-white mx-auto ">
-						<h2 className="text-4xl text-center py-10 px-5  capitalize">
-							This is payment
-						</h2>
+						<div className="text-center mb-6">
+							<h2 className="text-3xl font-bold text-black Text-4xl text-center py-10 px-5 capitalize">
+								This is payment
+							</h2>
+						</div>
 						<>
 							{isPending ? (
 								<button
