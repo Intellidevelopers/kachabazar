@@ -14,7 +14,6 @@ import { loadStripe } from '@stripe/stripe-js';
 
 const Payment = ({ isOpen, order, setIsPayment }) => {
 	let navigate = useNavigate();
-	console.log(order);
 	// paypal
 	const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 	useEffect(() => {
@@ -167,9 +166,11 @@ const Payment = ({ isOpen, order, setIsPayment }) => {
 									)}{' '}
 								</>
 								{/* stripe */}
-								<Elements stripe={stripePromise}>
-									<StripeCheckout order={order} />
-								</Elements>
+								<div className="h-fit">
+									<Elements stripe={stripePromise}>
+										<StripeCheckout order={order} />
+									</Elements>
+								</div>
 							</div>
 						</Dialog.Panel>
 					</Transition.Child>
