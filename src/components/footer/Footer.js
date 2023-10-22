@@ -31,7 +31,7 @@ function Footer() {
             </div>
             <div className="">
               <span className="block text-sm font-normal leading-5">
-                Free Shipping From $500.00
+                Free Shipping From NGN1000,00
               </span>
             </div>
           </div>
@@ -176,7 +176,7 @@ function Footer() {
                   <br />
                   <span>Tell:+234-808-888-6823</span>
                   <br />
-                  <span>Email: support@kachabazar.com.ng</span>
+                  <span>Email: speedafhost@gmail.com</span>
                 </p>
               </div>
             </div>
@@ -194,7 +194,7 @@ function Footer() {
                         rel="noreferrer"
                         target="_blank"
                         className="block text-center mx-auto text-gray-500 hover:text-white"
-                        href="https://www.facebook.com"
+                        href="https://web.facebook.com/profile.php?id=100095176025895"
                       >
                         <svg viewBox="0 0 64 64" width="34" height="34">
                           <circle
@@ -216,7 +216,7 @@ function Footer() {
                         rel="noreferrer"
                         target="_blank"
                         className="block text-center mx-auto text-gray-500 hover:text-white"
-                        href="https://twitter.com"
+                        href="https://twitter.com/tech_support_ng"
                       >
                         <svg viewBox="0 0 64 64" width="34" height="34">
                           <circle
@@ -238,7 +238,7 @@ function Footer() {
                         rel="noreferrer"
                         target="_blank"
                         className="block text-center mx-auto text-gray-500 hover:text-white"
-                        href="https://www.pinterest.com"
+                        href="https://www.pinterest.com/adeagbojosiah/"
                       >
                         <svg viewBox="0 0 64 64" width="34" height="34">
                           <circle
@@ -260,7 +260,7 @@ function Footer() {
                         rel="noreferrer"
                         target="_blank"
                         className="block text-center mx-auto text-gray-500 hover:text-white"
-                        href="https://www.linkedin.com"
+                        href="https://www.linkedin.com/in/adeagbo-josiah-b03562260"
                       >
                         <svg viewBox="0 0 64 64" width="34" height="34">
                           <circle
@@ -282,7 +282,7 @@ function Footer() {
                         rel="noreferrer"
                         target="_blank"
                         className="block text-center mx-auto text-gray-500 hover:text-white"
-                        href="https://www.whatsapp.com"
+                        href="https://wa.me/+2348087112167"
                       >
                         <svg viewBox="0 0 64 64" width="34" height="34">
                           <circle
@@ -337,7 +337,7 @@ function Footer() {
           </div>
           <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 flex justify-center py-4">
             <p className="text-sm text-gray-500 leading-6">
-              Copyright 2022 @
+              Copyright 2023 @
               <span className="text-emerald-500">KachaBazar</span>, All rights
               reserved.
             </p>

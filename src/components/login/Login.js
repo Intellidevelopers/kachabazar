@@ -24,26 +24,26 @@ const Login = ({ setIsOpenRegister }) => {
 		// console.log(isValidating);
 		setIsLoading(true);
 		axios
-			.post(`${process.env.REACT_APP_BASE_API_URL}/user/login`, values)
-			.then((res) => res.data)
-			.then((data) => {
-				setIsLoading(false);
-				toast.success(data.message);
-				localStorage.setItem('user', JSON.stringify(data));
-				dispatch(login(data));
-				dispatch(isLoginAction(false));
-			})
-			.catch((error) => {
-				toast.error(
-					error
-						? error?.response?.data?.error ||
-								error?.response?.data?.message ||
-								error?.response?.data?.error.message ||
-								error?.message
-						: error?.message
-				);
-				setIsLoading(false);
-			});
+		.post(`${process.env.REACT_APP_BASE_API_URL}/user/login`, values)
+		.then((res) => res.data)
+		.then((data) => {
+			setIsLoading(false);
+			toast.success(data.message);
+			localStorage.setItem('user', JSON.stringify(data));
+			dispatch(login(data));
+			dispatch(isLoginAction(false));
+		})
+		.catch((error) => {
+			toast.error(
+				error
+					? error?.response?.data?.error ||
+							error?.response?.data?.message ||
+							error?.response?.data?.error.message ||
+							error?.message
+					: error?.message
+			);
+			setIsLoading(false);
+		});
 	};
 	return (
 		<Transition appear show={isOpen} as={Fragment}>
